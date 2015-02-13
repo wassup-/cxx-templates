@@ -7,7 +7,7 @@
 #include <type_traits>
 
 #if !defined(TEMPLATE_ARGS_MAX_RECURSION)
-	#define TEMPLATE_ARGS_MAX_RECURSION 30
+  #define TEMPLATE_ARGS_MAX_RECURSION 30
 #endif
 
 namespace tmpl
@@ -17,9 +17,9 @@ namespace detail
 {
 
 enum class specialization_state {
-	invalid,
-	valid,
-	invalid_again
+  invalid,
+  valid,
+  invalid_again
 };
 
 template<bool, template<typename...> class C, typename... T>
@@ -38,26 +38,26 @@ struct num_arguments_max;
 template<template<typename...> class C, typename... T>
 struct num_arguments_max<specialization_state::invalid, C, T...>
 : num_arguments_max<
-	is_valid_specialization<C, T..., char>::value
-		? specialization_state::valid
-		: specialization_state::invalid,
-	C,
-	T...,	char
+  is_valid_specialization<C, T..., char>::value
+    ? specialization_state::valid
+    : specialization_state::invalid,
+  C,
+  T..., char
 >
 { };
 
 template<template<typename...> class C, typename... T>
 struct num_arguments_max<specialization_state::valid, C, T...>
 : std::conditional<
-	((sizeof...(T) == 0) || (sizeof...(T) == TEMPLATE_ARGS_MAX_RECURSION)),
-	std::integral_constant<int, -1>,
-	num_arguments_max<
-		is_valid_specialization<C, T..., char>::value
-			? specialization_state::valid
-			: specialization_state::invalid_again,
-		C,
-		T...,	char
-	>
+  ((sizeof...(T) == 0) || (sizeof...(T) == TEMPLATE_ARGS_MAX_RECURSION)),
+  std::integral_constant<int, -1>,
+  num_arguments_max<
+    is_valid_specialization<C, T..., char>::value
+      ? specialization_state::valid
+      : specialization_state::invalid_again,
+    C,
+    T..., char
+  >
 >::type
 { };
 
@@ -71,19 +71,19 @@ struct num_arguments_max<specialization_state::invalid_again, C, T...>
 template<template<typename...> class C>
 struct template_traits
 {
-	constexpr static int min_args = detail::num_arguments_min<is_valid_specialization<C>::value, C>::value;
-	constexpr static int max_args = detail::num_arguments_max<is_valid_specialization<C>::value
-																																		   ? detail::specialization_state::valid
-																																		   : detail::specialization_state::invalid,
-																																		 C>::value;
+  constexpr static int min_args = detail::num_arguments_min<is_valid_specialization<C>::value, C>::value;
+  constexpr static int max_args = detail::num_arguments_max<is_valid_specialization<C>::value
+                                                                       ? detail::specialization_state::valid
+                                                                       : detail::specialization_state::invalid,
+                                                                     C>::value;
 
-	constexpr static bool is_variadic = (max_args < min_args);
+  constexpr static bool is_variadic = (max_args < min_args);
 
-	template<typename... T>
-	using specializable_with = is_valid_specialization<C, T...>;
+  template<typename... T>
+  using specializable_with = is_valid_specialization<C, T...>;
 
-	template<typename... T>
-	using instantiable_with = is_valid_instantiation<C, T...>;
+  template<typename... T>
+  using instantiable_with = is_valid_instantiation<C, T...>;
 };
 
 } // namespace tmpl
