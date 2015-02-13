@@ -73,9 +73,9 @@ struct template_traits
 {
   constexpr static int min_args = detail::num_arguments_min<is_valid_specialization<C>::value, C>::value;
   constexpr static int max_args = detail::num_arguments_max<is_valid_specialization<C>::value
-                                                                       ? detail::specialization_state::valid
-                                                                       : detail::specialization_state::invalid,
-                                                                     C>::value;
+                                                              ? detail::specialization_state::valid
+                                                              : detail::specialization_state::invalid,
+                                                            C>::value;
 
   constexpr static bool is_variadic = (max_args < min_args);
 
