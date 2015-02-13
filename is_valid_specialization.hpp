@@ -1,7 +1,6 @@
 #ifndef IS_VALID_SPECIALIZATION_INCLUDED_
 #define IS_VALID_SPECIALIZATION_INCLUDED_
 
-#include "sfinae.hpp"
 #include <type_traits>
 
 namespace tmpl
@@ -14,14 +13,11 @@ template<template<typename...> class C, typename... T>
 struct is_valid_specialization_impl
 {
   template<template<typename...> class D>
-  static sfinae::yes test(D<T...>*);
+  static std::true_type test(D<T...>*);
   template<template<typename...> class D>
-  static sfinae::no test(...);
+  static std::false_type test(...);
 
-  using type =  typename std::conditional<(sizeof(test<C>(0)) == sizeof(sfinae::yes)),
-                                          std::true_type,
-                                          std::false_type
-                                          >::type;
+  using type = decltype(test<C>(0));
 };
 
 } // namespace detail

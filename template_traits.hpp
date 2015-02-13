@@ -24,11 +24,13 @@ enum class specialization_state {
 
 template<bool, template<typename...> class C, typename... T>
 struct num_arguments_min
-: std::integral_constant<int, sizeof...(T)> { };
+: std::integral_constant<int, sizeof...(T)>
+{ };
 
 template<template<typename...> class C, typename... T>
 struct num_arguments_min<false, C, T...>
-: num_arguments_min<is_valid_specialization<C, T..., char>::value, C, T..., char> { };
+: num_arguments_min<is_valid_specialization<C, T..., char>::value, C, T..., char>
+{ };
 
 template<specialization_state, template<typename...> class C, typename... T>
 struct num_arguments_max;
@@ -41,7 +43,8 @@ struct num_arguments_max<specialization_state::invalid, C, T...>
 		: specialization_state::invalid,
 	C,
 	T...,	char
-> { };
+>
+{ };
 
 template<template<typename...> class C, typename... T>
 struct num_arguments_max<specialization_state::valid, C, T...>
@@ -55,11 +58,13 @@ struct num_arguments_max<specialization_state::valid, C, T...>
 		C,
 		T...,	char
 	>
->::type { };
+>::type
+{ };
 
 template<template<typename...> class C, typename... T>
 struct num_arguments_max<specialization_state::invalid_again, C, T...>
-: std::integral_constant<int, (sizeof...(T) - 1)> { };
+: std::integral_constant<int, (sizeof...(T) - 1)>
+{ };
 
 } // namespace detail
 
