@@ -23,7 +23,7 @@ struct is_valid_specialization_impl
 } // namespace detail
 
 template<template<typename...> class C, typename... T>
-struct is_valid_specialization : detail::is_valid_specialization_impl<C, T...>::type { };
+using is_valid_specialization = typename detail::is_valid_specialization_impl<C, T...>::type;
 
 } // namespace tmpl
 

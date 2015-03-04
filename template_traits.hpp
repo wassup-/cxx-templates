@@ -71,13 +71,13 @@ struct num_arguments_max<specialization_state::invalid_again, C, T...>
 template<template<typename...> class C>
 struct template_traits
 {
-  constexpr static int min_args = detail::num_arguments_min<is_valid_specialization<C>::value, C>::value;
-  constexpr static int max_args = detail::num_arguments_max<is_valid_specialization<C>::value
+  constexpr static int args_min = detail::num_arguments_min<is_valid_specialization<C>::value, C>::value;
+  constexpr static int args_max = detail::num_arguments_max<is_valid_specialization<C>::value
                                                               ? detail::specialization_state::valid
                                                               : detail::specialization_state::invalid,
                                                             C>::value;
 
-  constexpr static bool is_variadic = (max_args < min_args);
+  constexpr static bool is_variadic = (args_max < args_min);
 
   template<typename... T>
   using specializable_with = is_valid_specialization<C, T...>;

@@ -31,7 +31,7 @@ struct is_valid_instantiation_impl
 } // namespace detail
 
 template<template<typename...> class C, typename... T>
-struct is_valid_instantiation : detail::is_valid_instantiation_impl<C, T...>::type { };
+using is_valid_instantiation = typename detail::is_valid_instantiation_impl<C, T...>::type;
 
 } // namespace tmpl
 
